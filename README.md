@@ -13,6 +13,7 @@ Example:
 python
 # Define a tile-based matrix multiplication
 
+"""
 @pytile.kernel
 def matmul(TensorA, TensorB, TensorC, m_t, n_t, k_t):
     pA = TensorA.Partition([(0, m_t), (1, k_t)]).Partition([(0, pt.pid[0])])
@@ -29,7 +30,7 @@ def matmul(TensorA, TensorB, TensorC, m_t, n_t, k_t):
                 else:
                     task_add = pt.add(rC, rD, rD)
             task_store = pt.store(rD, pC[pt.pid[0], pt.pid[1]][i_index][j_index])
-
+"""
 
 
 ​​Seamless Python Integration​​:

@@ -11,12 +11,27 @@ PyTile treats multi-dimensional arrays (e.g., vectors, matrices, or tensors) as 
 Example:
 
 python
-# Define a tile-based matrix multiplication  
-@pytile.kernel  
-def matmul(A: Tile[float32], B: Tile[float32], C: Tile[float32]):  
-    i, j = pytile.indices(2)  
-    C[i, j] = sum(A[i, k] * B[k, j] for k in range(A.shape[1]))  
-    
+# Define a tile-based matrix multiplication
+
+@pytile.kernel
+def matmul(TensorA, TensorB, TensorC, m_t, n_t, k_t):
+    pA = TensorA.Partition([(0, m_t), (1, k_t)]).Partition([(0, pt.pid[0])])
+    pB = TensorB.Partition([(0, m_t), (1, k_t)]).Partition([(0, pt.pid[1])])
+    pC = TensorC.Partition([(0, m_t), (1, k_t)]).Partition([(0, pt.pid[0]), (1, pt.pid[1])])
+    for i_index in range(len(pA[block_id][0]):
+        for j_index in range(len(pB[block_id][0])):
+            for k_index in range(pA[block_id][1]):
+                task_load_A = pt.load(rA, pA[pt.pid[0]][i_index][k_index])
+                task_load_B = pt.load(rB, pB[pt.pid[1]][j_index][k_index])
+                task_gemm = pt.gemm(rA, rB, rC)
+                if k_index == 0:
+                    task_copy = pt.copy(rC, rD)
+                else:
+                    task_add = pt.add(rC, rD, rD)
+            task_store = pt.store(rD, pC[pt.pid[0], pt.pid[1]][i_index][j_index])
+
+
+
 ​​Seamless Python Integration​​:
 
 PyTile provides Pythonic APIs that mirror NumPy and PyTorch semantics. Developers can transition CPU-bound code to GPU/NPU with minimal changes—often just modifying imports.

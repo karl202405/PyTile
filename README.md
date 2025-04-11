@@ -1,4 +1,4 @@
-# PyTile
+# TilePy
 
 PyTile​​ is a high-performance, tile-based programming language and framework designed specifically for GPU and NPU acceleration, offering Python developers an intuitive way to harness parallel computing power without compromising productivity. Inspired by NVIDIA's ​​CuTile​​ model, PyTile reimagines array-centric computation by abstracting low-level hardware complexities into ​​tiles​​—logical data blocks that serve as the fundamental unit of execution.
 
